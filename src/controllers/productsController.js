@@ -27,26 +27,73 @@ const controller = {
 
 	// Create - Form to create
 	create: (req, res) => {
-		// Do the magic
+		res.render("product-create-form");
 	},
 	
 	// Create -  Method to store
 	store: (req, res) => {
-		// Do the magic
+		let producto = {
+			id: products[products.length - 1].id + 1,
+			name: req.body.name,
+			price: req.body.price,
+			discount: req.body.discount,
+			category: req.body.category,
+			description: req.body.description,
+			image: req.body.image
+		}
+		products.push(producto);
+		fs.writeFileSync(productsFilePath, JSON.stringify(products, null, ' '));
+		res.redirect("/products");
 	},
 
 	// Update - Form to edit
 	edit: (req, res) => {
-		// Do the magic
+		let id = req.params.id;
+		let producto = products.find((producto)=>{
+			return producto.id == id;
+		})
+		if(!producto){
+			res.render("error", {message: "Producto no encontrado"})
+		} else {
+		res.render("product-edit-form", {producto: producto})
+		}
 	},
 	// Update - Method to update
 	update: (req, res) => {
-		// Do the magic
+		let id = req.params.id;
+		let producto = products.find((producto)=>{
+			return producto.id == id;
+		})
+		if(!producto){
+			res.render("error", {message: "Producto no encontrado"})
+		} else {
+			producto.name = req.body.name;
+			producto.price = req.body.price;
+			producto.discount = req.body.discount;
+			producto.category = req.body.category;
+			producto.description = req.body.description;
+			producto.image = req.body.image;
+			fs.writeFileSync(productsFilePath, JSON.stringify(products, null, ' '));
+			res.redirect("/products");
+		}
+
 	},
 
 	// Delete - Delete one product from DB
 	destroy : (req, res) => {
-		// Do the magic
+		let id = req.params.id;
+		let producto = products.find((producto)=>{
+			return producto.id == id;
+		})
+		if(!producto){
+			res.render("error", {message: "Producto no encontrado"})
+		} else {
+			let productosFiltrados = products.filter((producto)=>{
+				return producto.id != id;
+			})
+			fs.writeFileSync(productsFilePath, JSON.stringify(productosFiltrados, null, ' '));
+			res.redirect("/products");
+		}
 	}
 };
 

@@ -9,13 +9,13 @@ const toThousand = n => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
 const controller = {
 	index: (req, res) => {
-		let visitados = products.filter((producto)=>{
+		let visitados = products.filter((producto) => {
 			return producto.category == "visited";
 		})
-		let ofertas = products.filter((producto)=>{
+		let ofertas = products.filter((producto) => {
 			return producto.category == "in-sale";
 		})
-		res.render('index', {visitados: visitados, ofertas: ofertas});
+		res.render('index', { visitados: visitados, ofertas: ofertas, toThousand });
 	},
 	search: (req, res) => {
 		// Do the magic
